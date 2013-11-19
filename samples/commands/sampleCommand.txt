@@ -1,0 +1,17 @@
+	
+// Add a specif index on artifacts collection
+db.artifacts.ensureIndex({org:1,name:1,version:1,type:1,status:1},{unique:true})
+
+//Apply map/reduce version on artifacts collection, output is artifacts.latest collection
+db.artifacts.mapReduce(map_version_function,reduce_latestversion_function,{ out: "artifacts.latest", scope:{ version_compare:version_compare }, finalize:finalize_function})
+
+//Apply map/reduce deprecated_version on artifacts collection, output is artifacts.deprecated collection
+db.artifacts.mapReduce(map_version_function,reduce_deprecatedversion_function,{ out: "artifacts.deprecated", scope:{  version_compare:version_compare,reduce_latestversion_function:reduce_latestversion_function },finalize:finalize_function })
+
+
+./mongo localhost:27017/repo --shell /Users/gregory/Dev/maven-mongoimporter/infra/mongodb/mapReduce.js
+
+./mongo --nodb  /Users/gregory/Dev/maven-mongoimporter/infra/mongodb/mapReduceScript.js
+
+./mongoexport --db repo --collection artifacts.latest --fields _id.org,_id.name,value --csv
+

@@ -1,0 +1,21 @@
+//TEST DATA
+db.artifacts.remove({org:"test", name:"test", type:"binary", status:"RELEASED"})
+
+db.artifacts.insert({org:"test", name:"test", type:"binary", status:"RELEASED", version:"3.10", isForce:false})
+db.artifacts.insert({org:"test", name:"test", type:"binary", status:"RELEASED", version:"3.8", isForce:false})
+db.artifacts.insert({org:"test", name:"test", type:"binary", status:"RELEASED", version:"3.6", isForce:false})
+db.artifacts.insert({org:"test", name:"test", type:"binary", status:"RELEASED", version:"3.12", isForce:false})
+db.artifacts.insert({org:"test", name:"test", type:"binary", status:"RELEASED", version:"3.4", isForce:false})
+
+db.artifacts.update({org:"test", type:"binary", status:"RELEASED", version:"3.8"},{$set:{isForce:true}})
+
+//TEST DATA REQUEST
+db.artifacts.find({org:"test", name:"test"}).pretty()
+
+db.artifacts.mapReduce(map_version_function,reduce_latestversion_function,{ out: { merge: 'artifacts.latest'}, scope:{ version_compare:version_compare }, query: {org:'test',name:'test'}, finalize:finalize_function})
+
+db.artifacts.latest.find({_id:{org:"test", name:"test",type:"binary",status:"RELEASED"}}).pretty()
+
+db.artifacts.mapReduce(map_version_function,reduce_deprecatedversion_function,{ out: "artifacts.deprecated", scope:{  version_compare:version_compare,reduce_latestversion_function:reduce_latestversion_function},query: {org:'test',name:'test'},finalize:finalize_function })
+
+db.artifacts.deprecated.find({_id:{org:"test", name:"test",type:"binary",status:"RELEASED"}}).pretty()
