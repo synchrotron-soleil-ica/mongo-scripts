@@ -1,0 +1,10 @@
+//Bucket Creation
+curl -X POST -u Administrator:admin123 -d name=repoBucket -d ramQuotaMB=200 -d authType=none -d replicaNumber=0 -d proxyPort=11215 http://172.16.5.7:8091/pools/default/buckets
+
+//Bucket Destruction
+curl -X DELETE -u Administrator:admin123 http://172.16.5.7:8091/pools/default/buckets/repoBucket -v -i
+
+//Code creation vue default/_design/artifact/_view/ArtifactView
+function (doc, meta) {
+  emit([doc.organisation,doc.name,doc.version,doc.status, doc.type], null);
+}
