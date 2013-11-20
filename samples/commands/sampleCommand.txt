@@ -13,5 +13,6 @@ db.artifacts.mapReduce(map_version_function,reduce_deprecatedversion_function,{ 
 
 ./mongo --nodb  /Users/gregory/Dev/maven-mongoimporter/infra/mongodb/mapReduceScript.js
 
+//- commande exportation pour produire un fichier CSV
 ./mongoexport --db repo --collection artifacts.latest --fields _id.org,_id.name,value --csv
 
