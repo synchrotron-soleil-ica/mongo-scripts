@@ -1,6 +1,5 @@
 
 
-
 *********************************
 1. COUCHBASE SETUP
 *********************************
@@ -98,8 +97,8 @@ db.artifacts.find({org:"fr.esrf.tango", name:"TangORB"}).pretty()
 4.3 -- RUN MAP REDUCE BY SCRIPT ON MONGODB
 *********************************
 
-> ./mongo --nodb /nfs/build/mavenrepo/mongorepo-test/test-import/mapReduceLatestVersionCollectionScript.js
-> ./mongo --nodb /nfs/build/mavenrepo/mongorepo-test/test-import/mapReduceDeprecatedVersionCollectionScript.js
+> ./mongo --nodb /nfs/build/mavenrepo/mongorepo-test/test-import/mapReduceLastVersionScript.js
+> ./mongo --nodb /nfs/build/mavenrepo/mongorepo-test/test-import/mapReduceDeprecatedVersionScript.js
 
 *********************************
 5. TEST
