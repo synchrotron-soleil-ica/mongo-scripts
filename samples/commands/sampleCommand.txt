@@ -16,3 +16,11 @@ db.artifacts.mapReduce(map_version_function,reduce_deprecatedversion_function,{ 
 //- commande exportation pour produire un fichier CSV
 ./mongoexport --db repo --collection artifacts.latest --fields _id.org,_id.name,value --csv
 
+//Versions values with string
+db.artifacts.distinct('version',{version:{'$regex':"[a-z]+"}},{version:1,_id:0})
+
+db.artifacts.find({version:{'$regex':"[a-z]+"}},{org:1,name:1,version:1,_id:0}).pretty()
+
+
+
+
