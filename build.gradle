@@ -1,0 +1,72 @@
+apply plugin: 'distribution'
+apply plugin: 'maven-publish'
+
+version = "1.0.0"
+
+project.ext {
+    mavenGroup = 'fr.synchrotron.soleil.ica.ci.lib.maven'
+    mavenDescription = 'Maven Mongo Scripts'
+    mavenScmUrl = 'https://github.com/synchrotron-soleil-ica/mongo-scripts'
+    mavenDeveloperConnectionUrl = 'scm:git:ssh:git@github.com:synchrotron-soleil-ica/mongo-scripts.git'
+    mavenConnectionUrl = 'scm:git:git://github.com/synchrotron-soleil-ica/mongo-scripts.git'
+    mavenStatus = 'RELEASE'
+}
+
+distributions {
+    main {
+        baseName = 'map-reduce-files'
+        contents {
+            from { 'mapReduce/files' }
+        }
+    }
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+
+            groupId project.mavenGroup
+            version version + "." + project.mavenStatus
+
+            artifact('README.md') {
+                classifier = 'README'
+                extension = 'md'
+            }
+
+            artifact(distZip)
+
+            pom.withXml {
+                asNode().children().last() + {
+                    resolveStrategy = Closure.DELEGATE_FIRST
+                    name project.name
+                    description project.mavenDescription
+                    scm {
+                        url project.mavenScmUrl
+                        connection project.mavenConnectionUrl
+                        developerConnection project.mavenDeveloperConnectionUrl
+                    }
+                    licenses {
+                        license {
+                            name 'MIT license'
+                            comments 'All source code is under the MIT license.'
+                        }
+                    }
+                    developers {
+                        developer {
+                            id 'gboissinot'
+                            name 'Gregory Boissinot'
+                            email 'gregory.boissinot@gmail.com'
+                        }
+                    }
+                }
+            }
+
+            repositories {
+                maven {
+                    url "file:/${project.projectDir}/artifacts"
+                }
+            }
+        }
+    }
+}
+
