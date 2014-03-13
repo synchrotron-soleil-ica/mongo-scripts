@@ -167,7 +167,8 @@ function finalize_function(key, value){
 }
 
 
-conn = new Mongo("localhost:27017");
+//conn = new Mongo("localhost:27017");
+conn = new Mongo("172.16.5.7:27001");
 db = conn.getDB("repo");
 db.artifacts.mapReduce(map_version_function,reduce_latestversion_function,{ out: "artifacts.latest", scope:{ version_compare:version_compare }, finalize:finalize_function})
 var error = db.getLastError()
